@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:async';
 
-// import 'package:churchapp/http/contant/constant.dart';
 import 'package:churchapp/models/bookedModel.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +29,7 @@ class _BookingStatusState extends State<BookingStatus> {
     });
   }
 
-  Future<List<Booked>> mBooked;
+
 
   Future<BookModel> booked;
 
