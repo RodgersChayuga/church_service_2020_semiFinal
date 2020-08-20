@@ -1,5 +1,7 @@
+import 'package:churchapp/http/connectivity.dart';
 import 'package:churchapp/http/contant/constant.dart';
 import 'package:churchapp/screens/route_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -7,9 +9,9 @@ import 'dart:async';
 
 import 'package:churchapp/models/bookedModel.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BookingStatus extends StatefulWidget {
-
   @override
   _BookingStatusState createState() => _BookingStatusState();
 }
@@ -29,9 +31,8 @@ class _BookingStatusState extends State<BookingStatus> {
     });
   }
 
-
-
   Future<BookModel> booked;
+  bool isConn = true;
 
   Future<BookModel> getBooked() async {
     //get user id  from pref
@@ -46,12 +47,22 @@ class _BookingStatusState extends State<BookingStatus> {
     return BookModel.fromJson(jsonResponse);
   }
 
-
+  checkConn() {
+    check().then((internet) {
+      if (internet != null && internet) {
+        // Internet Present Case
+        isConn = true;
+      }
+      // No-Internet Case
+      isConn = false;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    booked=getBooked();
+    checkConn();
+    booked = getBooked();
   }
 
   @override
@@ -89,10 +100,12 @@ class _BookingStatusState extends State<BookingStatus> {
         if (snapshot.hasData) {
           return showMyUI(snapshot.data.booked);
         } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
+          return isConn ? Text("${snapshot.error}") : noConnection();
         }
 // By default, show a loading spinner.
-        return Center(child: CircularProgressIndicator(),);
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }
@@ -135,7 +148,7 @@ class _BookingStatusState extends State<BookingStatus> {
                       new Padding(
                           padding: new EdgeInsets.symmetric(vertical: 3.0)),
                       new Text(
-                          'Seats Booked :  ${  jsonDecode(booked[index].seats)  }'),
+                          'Seats Booked :  ${jsonDecode(booked[index].seats)}'),
 
 //                    new Padding(
 //                        padding: new EdgeInsets.symmetric(vertical: 3.0)),
@@ -151,7 +164,6 @@ class _BookingStatusState extends State<BookingStatus> {
                       new Padding(
                           padding: new EdgeInsets.symmetric(vertical: 3.0)),
                       new Text('End: ${booked[index].endHour}'),
-
 
                       new Padding(
                           padding: new EdgeInsets.symmetric(vertical: 3.0)),
@@ -170,5 +182,78 @@ class _BookingStatusState extends State<BookingStatus> {
         );
       },
     );
+  }
+
+  Widget noConnection() {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                "assets/images/wifi.png",
+                height: 60,
+                width: 60,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            "No Internet Connection",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 40, left: 40, top: 20),
+            child: Container(
+              child: Text(
+                "You must be connected to the internet to complete this action",
+                style: TextStyle(
+                    fontSize: 15, color: Color.fromRGBO(220, 220, 220, 1.0)),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          ButtonTheme(
+            minWidth: 200.0,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  side: BorderSide(color: primaryColor)),
+              onPressed: () {
+                if (isConn) {
+                  setState(() {
+                    booked = getBooked();
+                    showToast("Refreshing..");
+                  });
+                } else {
+                  showToast("Check Connectivity");
+                }
+              },
+              color: primaryColor,
+              textColor: Colors.white,
+              child: Text("Try Again".toUpperCase(),
+                  style: TextStyle(fontSize: 14)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showToast(String message) {
+    Fluttertoast.showToast(
+        msg: '$message',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey[800],
+        textColor: Colors.white);
   }
 }

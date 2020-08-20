@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:churchapp/http/connectivity.dart';
 import 'package:churchapp/http/contant/constant.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:churchapp/http/http_response/http_response.dart';
@@ -127,6 +128,20 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
     });
   }
 
+  bool isConn=true;
+
+  checkConn() {
+    check().then((internet) {
+      if (internet != null && internet) {
+        // Internet Present Case
+        isConn = true;
+      }
+      // No-Internet Case
+      isConn = false;
+    });
+  }
+
+
   //
   List<Company> _companies = Company.getCompanies();
   List<DropdownMenuItem<Company>> _dropdownMenuItems;
@@ -136,6 +151,7 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
   void initState() {
     _dropdownMenuItems = buildDropdownMenuItems(_companies);
     _selectedCompany = _dropdownMenuItems[0].value;
+    checkConn();
     super.initState();
   }
 
@@ -426,42 +442,49 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
 //                                    });
 
 
+                                    if(isConn){
+                                      if(service==null){
+                                        showToast("Select service");
+                                        setState(() {
+                                          isButtonEnabled=true;
+                                        });
+                                      }else{
+                                        var len=selectedValues.length;
+                                        _seat.text=len.toString();
 
-                                    if(service==null){
-                                      showToast("Select service");
-                                      setState(() {
-                                        isButtonEnabled=true;
-                                      });
-                                    }else{
-                                      var len=selectedValues.length;
-                                      _seat.text=len.toString();
 
+                                        for (var i = 0; i < len; i++) {
+                                          String json=jsonEncode(selectedValues[i]);
+                                          var data = {
 
-                                      for (var i = 0; i < len; i++) {
-                                        String json=jsonEncode(selectedValues[i]);
-                                        var data = {
-
-                                          "service_name":"$service",
-                                          "seats": "$json",
-                                        };
+                                            "service_name":"$service",
+                                            "seats": "$json",
+                                          };
                                           showToast("Selecting..");
-                                        // Starting Web API Call.
-                                        var response = await http.post(Constant.checkSeat, body: data);
-                                        // Getting Server response into variable.
-                                        final rData = jsonDecode(response.body);
-                                        Response r=  Response.fromResponse(rData);
-                                        if(r.error==true){
-                                           setState(() {
-                                             isButtonEnabled=true;
-                                             showToast(r.message);
-                                           });
-                                        }else{
-                                          setState(() {
-                                            isButtonEnabled=false;
-                                          });
+                                          // Starting Web API Call.
+                                          var response = await http.post(Constant.checkSeat, body: data);
+                                          // Getting Server response into variable.
+                                          final rData = jsonDecode(response.body);
+                                          Response r=  Response.fromResponse(rData);
+                                          if(r.error==true){
+                                            setState(() {
+                                              isButtonEnabled=true;
+                                              showToast(r.message);
+                                            });
+                                          }else{
+                                            setState(() {
+                                              isButtonEnabled=false;
+                                            });
+                                          }
                                         }
                                       }
+                                    }else{
+
+                                      showToast("No Internet Connection");
                                     }
+
+
+
                                   },
 
                                   selectIcon: Icons.arrow_drop_down_circle,
@@ -493,9 +516,16 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
                                 _validate = true;
                                 showToast("Select number of seats");
                               } else if (_seat.text.isNotEmpty) {
-                                pr.show();
-                                _validate = false;
-                                _submit();
+                                if(isConn){
+                                  pr.show();
+                                  _validate = false;
+                                  _submit();
+
+                                }else{
+                                  showToast("No Internet Connection");
+                                }
+
+
                               }
                             });
                           },
