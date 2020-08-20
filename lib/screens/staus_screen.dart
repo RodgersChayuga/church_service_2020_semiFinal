@@ -227,14 +227,12 @@ class _BookingStatusState extends State<BookingStatus> {
                   borderRadius: BorderRadius.circular(18.0),
                   side: BorderSide(color: primaryColor)),
               onPressed: () {
-                if (isConn) {
-                  setState(() {
-                    booked = getBooked();
-                    showToast("Refreshing..");
-                  });
-                } else {
-                  showToast("Check Connectivity");
-                }
+
+                setState(() {
+                  checkConn();
+                  booked = getBooked();
+                  showToast("Refreshing..");
+                });
               },
               color: primaryColor,
               textColor: Colors.white,
