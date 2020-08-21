@@ -25,26 +25,33 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 1, 1, 1),
+          child: Image.asset(
+            'assets/images/dcu-logo.png',
+            fit: BoxFit.contain,
+            height: 25,
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.exit_to_app,
+              color: Colors.white,
+            ),
+            onPressed: () => logOut(),
+          ),
+        ],
+        title: Center(
+          child: Text('Welcome'),
+        ),
+        backgroundColor: primaryColor,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
-            Image.asset(
-              'assets/images/dcu-logo.png',
-              fit: BoxFit.contain,
-              height: 100,
-            ),
-            Center(
-              child: Text("Deliverance Church Utawala\nThe Church of Choice",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.openSans(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18)),
-            ),
-            SizedBox(
-              height: 20,
-            ),
             Card(
               elevation: 0,
               child: Padding(
@@ -54,21 +61,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Our Strategic statements at DCU",
+                        "Our Strategic statements",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.openSans(
                             color: Colors.black87,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                             fontSize: 20),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "Vision :",
-                          textAlign: TextAlign.center,
+                      child: Text("Vision :",
+                          textAlign: TextAlign.start,
                           style: GoogleFonts.openSans(
-                              color: Colors.deepPurple,fontSize: 18,
+                              color: Colors.deepPurple,
+                              fontSize: 18,
                               fontWeight: FontWeight.w500)),
                     ),
                     Padding(
@@ -82,11 +89,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "Mission :",
+                      child: Text("Mission :",
                           textAlign: TextAlign.center,
                           style: GoogleFonts.openSans(
-                              color: Colors.deepPurple,fontSize: 18,
+                              color: Colors.deepPurple,
+                              fontSize: 18,
                               fontWeight: FontWeight.w500)),
                     ),
                     Padding(
@@ -100,11 +107,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "Core Values :",
+                      child: Text("Core Values :",
                           textAlign: TextAlign.center,
                           style: GoogleFonts.openSans(
-                              color: Colors.deepPurple,fontSize: 18,
+                              color: Colors.deepPurple,
+                              fontSize: 18,
                               fontWeight: FontWeight.w500)),
                     ),
                     Padding(

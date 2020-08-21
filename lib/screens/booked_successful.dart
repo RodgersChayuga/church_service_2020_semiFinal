@@ -1,12 +1,10 @@
 import 'package:churchapp/screens/route_controller.dart';
-import 'package:churchapp/models/Response.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'booking_screen.dart';
-import 'navigation_bar.dart';
-import 'welcome_screen.dart';
+import 'seats/successful_nav_bar.dart';
 
 class BookedSuccess extends StatefulWidget {
   @override
@@ -33,9 +31,11 @@ class _BookedSuccessState extends State<BookedSuccess> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
               'assets/images/dcu-logo.png',
@@ -43,83 +43,121 @@ class _BookedSuccessState extends State<BookedSuccess> {
               height: 100,
             ),
             Center(
-              child: Text("Deliverance Church Utawala\nThe Church of Choice",
+              child: Text("Deliverance Church Int'l Utawala\nThe Church of Choice",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.openSans(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
+                      color: Colors.deepPurple,
+                      fontWeight: FontWeight.w500,
                       fontSize: 18)),
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
-            Card(
-              elevation: 5,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text("RESERVATION SUCCESSFUL!",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.openSans(
-                            color: Colors.green,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18)),
+            Column(
+              children: [
+                Card(
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '''Thank you for choosing :\n\nDELIVERANCE CHURCH UTAWALA\n\nKindly keep time.''',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.openSans(
-                          color: Colors.black87, fontWeight: FontWeight.w500),
-                    ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text("RESERVATION SUCCESSFUL!",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.openSans(
+                                color: Colors.green,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Thank you for choosing :',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.openSans(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'DELIVERANCE CHURCH INT\'l UTAWALA',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.openSans(
+                                  color: Colors.deepPurple,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'Kindly keep time.',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.openSans(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(30.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            MaterialButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: logoGreen),
+                              ),
+                              elevation: 5,
+                              height: 40,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BookASeat()),
+                                );
+                              },
+                              color: logoGreen,
+                              child: Text(
+                                'Add Seats',
+                                style: GoogleFonts.openSans(
+                                    color: Colors.white, fontSize: 16),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            MaterialButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: logoGreen),
+                              ),
+                              elevation: 5,
+                              height: 40,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SuccessfulNavBar()),
+                                );
+                              },
+                              color: logoGreen,
+                              child: Text(
+                                'Go To Status',
+                                style: GoogleFonts.openSans(
+                                    color: Colors.white, fontSize: 16),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 30.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MaterialButton(
-                    elevation: 5,
-                    height: 40,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => BookASeat()),
-                      );
-                    },
-                    color: logoGreen,
-                    child: Text(
-                      'Add Seats',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  MaterialButton(
-                    elevation: 5,
-                    height: 40,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyNavBar()),
-                      );
-                    },
-                    color: logoGreen,
-                    child: Text(
-                      'Home',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

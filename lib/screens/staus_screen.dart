@@ -68,6 +68,7 @@ class _BookingStatusState extends State<BookingStatus> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(8, 1, 1, 1),

@@ -65,10 +65,8 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
   final Color logoGreen = Color(0xff25bcbb);
   final Color secondaryColor = Color(0xff232c51);
 
-
   List<dynamic> selectedValues = [];
   var concatenate = StringBuffer();
-
 
   //Service method
   Service _serviceValue;
@@ -95,7 +93,7 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
 
   //Declare response
   HttpResponse _response;
-  bool isButtonEnabled=true;
+  bool isButtonEnabled = true;
 
   //initialize response
   BookASeatState() {
@@ -109,9 +107,8 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
     if (_validate == false) {
       setState(() {
         form.save();
-        String json=jsonEncode(selectedValues);
-      _response.doBook(service, seats, church,json);
-
+        String json = jsonEncode(selectedValues);
+        _response.doBook(service, seats, church, json);
       });
     }
   }
@@ -128,7 +125,7 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
     });
   }
 
-  bool isConn=true;
+  bool isConn = true;
 
   checkConn() {
     check().then((internet) {
@@ -140,7 +137,6 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
       isConn = false;
     });
   }
-
 
   //
   List<Company> _companies = Company.getCompanies();
@@ -238,6 +234,7 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
       insetAnimCurve: Curves.easeInOut,
     );
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       key: _scaffoldKey,
       appBar: AppBar(
         leading: Padding(
@@ -282,6 +279,9 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
                 children: <Widget>[
                   Container(
                     child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
@@ -289,8 +289,7 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Padding(
-                                padding:
-                                const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -299,14 +298,20 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Center(
                                         child: Text(
-                                            "Deliverance Church Utawala\nSeating Structure", textAlign: TextAlign.center,
+                                          "Deliverance Church Utawala\nSeating Structure",
+                                          textAlign: TextAlign.center,
                                           style: GoogleFonts.openSans(
-                                              color: Colors.black87, fontSize: 21, fontWeight: FontWeight.w600),
+                                              color: Colors.black87,
+                                              fontSize: 21,
+                                              fontWeight: FontWeight.w600),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 10,),
-                                    Image.asset("assets/images/seats-structure.png")
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Image.asset(
+                                        "assets/images/seats-structure.png")
                                   ],
                                 ),
                               ),
@@ -318,6 +323,9 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
                   ),
                   Container(
                     child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
@@ -371,16 +379,19 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
                                 },
                               ),
                               RadioListTile(
-                                title: const Text('Teen\'s service',
+                                title: const Text(
+                                  'Teen\'s service',
                                 ),
                                 value: Service.FOURTH,
                                 groupValue: _serviceValue,
                                 onChanged: (Service value) {
-                                  setState(() {
-                                    _serviceValue = value;
-                                    Service data = value;
-                                    service = data._service;
-                                  });
+                                  setState(
+                                    () {
+                                      _serviceValue = value;
+                                      Service data = value;
+                                      service = data._service;
+                                    },
+                                  );
                                 },
                               ),
                             ],
@@ -391,7 +402,9 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
                   ),
                   Container(
                     child: Card(
-
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
@@ -415,15 +428,16 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
                                 child: new MultiSelect(
                                   autovalidate: true,
                                   initialValue: [' ', ' '],
-                                  titleText: '',
-                                  maxLength: 5, // optional
+                                  titleText: 'You can only book: ',
+                                  maxLength: 1, // optional
                                   validator: (dynamic value) {
                                     if (value == null) {
                                       return 'Please select one or more seat(s)';
                                     }
                                     return null;
                                   },
-                                  errorText: 'Please select one or more seat(s)',
+                                  errorText:
+                                      'Please select one or more seat(s)',
                                   dataSource: seatDropDown,
                                   textField: 'seat_number',
                                   valueField: 'ID',
@@ -431,64 +445,61 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
                                   required: true,
                                   onSaved: (value) {
                                     print('The value is $value');
-
                                   },
 
                                   change: (value) async {
-
                                     selectedValues = value;
 //                                    selectedValues.forEach((item){
 //                                      concatenate.write(item);
 //                                    });
 
-
                                     // Internet Present Case
-                                    if(service==null){
+                                    if (service == null) {
                                       showToast("Select service");
                                       setState(() {
-                                        isButtonEnabled=true;
+                                        isButtonEnabled = true;
                                       });
-                                    }else{
-                                      var len=selectedValues.length;
-                                      _seat.text=len.toString();
-
+                                    } else {
+                                      var len = selectedValues.length;
+                                      _seat.text = len.toString();
 
                                       for (var i = 0; i < len; i++) {
-                                        String json=jsonEncode(selectedValues[i]);
+                                        String json =
+                                            jsonEncode(selectedValues[i]);
                                         var data = {
-
-                                          "service_name":"$service",
+                                          "service_name": "$service",
                                           "seats": "$json",
                                         };
                                         showToast("Selecting..");
                                         // Starting Web API Call.
-                                        var response = await http.post(Constant.checkSeat, body: data);
+                                        var response = await http.post(
+                                            Constant.checkSeat,
+                                            body: data);
                                         // Getting Server response into variable.
                                         final rData = jsonDecode(response.body);
-                                        Response r=  Response.fromResponse(rData);
-                                        if(r.error==true){
+                                        Response r =
+                                            Response.fromResponse(rData);
+                                        if (r.error == true) {
                                           setState(() {
-                                            isButtonEnabled=true;
+                                            isButtonEnabled = true;
                                             showToast(r.message);
                                           });
-                                        }else{
+                                        } else {
                                           setState(() {
-                                            isButtonEnabled=false;
+                                            isButtonEnabled = false;
                                           });
                                         }
                                       }
                                     }
-
-
-
-
-
                                   },
 
                                   selectIcon: Icons.arrow_drop_down_circle,
-                                  saveButtonColor: Theme.of(context).primaryColor,
-                                  checkBoxColor: Theme.of(context).primaryColorDark,
-                                  cancelButtonColor: Theme.of(context).primaryColorLight,
+                                  saveButtonColor:
+                                      Theme.of(context).primaryColor,
+                                  checkBoxColor:
+                                      Theme.of(context).primaryColorDark,
+                                  cancelButtonColor:
+                                      Theme.of(context).primaryColorLight,
                                 ),
                               ),
                             ],
@@ -505,28 +516,35 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
                     child: Container(
                       width: 0.5,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 60,top: 0, right: 60, bottom: 0),
+                        padding: const EdgeInsets.only(
+                            left: 60, top: 0, right: 60, bottom: 0),
                         child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: logoGreen),
+                          ),
                           elevation: 1,
-                          onPressed: isButtonEnabled ? null: () {
-                            setState(() {
-                              if (_seat.text.isEmpty) {
-                                _validate = true;
-                                showToast("Select number of seats");
-                              } else if (_seat.text.isNotEmpty) {
-                                pr.show();
-                                _validate = false;
-                                _submit();
-
-
-                              }
-                            });
-                          },
+                          onPressed: isButtonEnabled
+                              ? null
+                              : () {
+                                  setState(() {
+                                    if (_seat.text.isEmpty) {
+                                      _validate = true;
+                                      showToast("Select number of seats");
+                                    } else if (_seat.text.isNotEmpty) {
+                                      pr.show();
+                                      _validate = false;
+                                      _submit();
+                                    }
+                                  });
+                                },
                           color: logoGreen,
                           child: Text(
-                            'Book now',
+                            'Submit Reservation',
                             style: GoogleFonts.openSans(
-                                color: Color(0xff18203d), fontSize: 16),
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
@@ -557,7 +575,7 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
         pr.hide();
         String message = response.message;
         showToast("$message");
-         Navigator.pushNamed(context, 'BookedSuccess');
+        Navigator.pushNamed(context, 'BookedSuccess');
       } else if (response.error == true) {
         pr.hide();
         String message = response.message;
@@ -568,6 +586,4 @@ class BookASeatState extends State<BookASeat> implements HttpCallBack {
       showToast("failed");
     }
   }
-
-
 }
